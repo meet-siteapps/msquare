@@ -1,22 +1,34 @@
 const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const app = express();
-const PORT = process.env.PORT || 5000;
+const jobRoutes = require('./routes/jobs');
+const applicationRoutes = require('./routes/applications');
+const inquiryRoutes = require('./routes/inquiries');
+const authRoutes = require('./routes/auth');
 
-// Connect to database
+dotenv.config();
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
+// Connect to MongoDB
 connectDB();
 
-// Middleware to parse JSON
-app.use(express.json());
+// Routes
+app.use('/api/jobs', jobRoutes);
+app.use('/api/applications', applicationRoutes);
+app.use('/api/inquiries', inquiryRoutes);
+app.use('/api/auth', authRoutes);
 
-// Root route to send welcome text
-app.get('/', (req, res) => {
-  res.send('welcome to our solar world');
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Server error' });
 });
 
-// Placeholder for routes
-// e.g. app.use('/api/jobs', require('./dataBase/routes/jobs'));
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
