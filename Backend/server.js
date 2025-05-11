@@ -6,6 +6,8 @@ const jobRoutes = require('./routes/jobs');
 const applicationRoutes = require('./routes/applications');
 const inquiryRoutes = require('./routes/inquiries');
 const authRoutes = require('./routes/auth');
+const promotionRoutes = require('./routes/promotions');
+const foundersRoutes = require('./routes/founders');
 
 dotenv.config();
 const app = express();
@@ -23,6 +25,8 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/promotions', promotionRoutes);
+app.use('/api/founders', foundersRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -31,4 +35,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
